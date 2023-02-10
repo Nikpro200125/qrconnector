@@ -1,5 +1,5 @@
-name: chat
-description: A new Flutter project.
+name: qrconnector
+description: Web application for fast transfer of information from phone to computer via qr code.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -12,11 +12,11 @@ dependencies:
   qr_flutter: ^4.0.0
   flutter:
     sdk: flutter
-  firebase_core: ^2.4.1
-  firebase_database: ^10.0.9
-  url_launcher: ^6.1.8
+  firebase_core: ^2.5.0
+  firebase_database: ^10.0.10
+  url_launcher: ^6.1.9
   animated_text_kit: ^4.2.2
-  go_router: ^6.0.2
+  go_router: ^6.0.6
 
 dev_dependencies:
   flutter_test:
