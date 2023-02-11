@@ -1,5 +1,7 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import 'QRWidget.dart';
 import 'constants.dart';
 

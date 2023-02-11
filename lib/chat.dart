@@ -1,9 +1,12 @@
 import 'dart:async';
-import 'package:qrconnector/historyList.dart';
-import 'package:firebase_core/firebase_core.dart';
+
+import 'package:file_selector/file_selector.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qrconnector/historyList.dart';
+
 import 'constants.dart';
 
 class Chat extends StatefulWidget {
@@ -48,19 +51,39 @@ class _ChatState extends State<Chat> {
               child: HistoryList(urls: listUrls, listkey: listKey),
             ),
             SizedBox(height: 10),
-            Container(
-              child: CupertinoTextField(
-                controller: _controller,
-                autofocus: true,
-                onSubmitted: onSubmit,
-                textAlign: TextAlign.center,
-                style: Const.textStyleChatField,
-                placeholder: "Type here something",
-                placeholderStyle:
-                    Const.textStyleChatField.copyWith(color: Colors.grey[350]),
-                keyboardType: TextInputType.url,
-                onEditingComplete: () {}, // prevent keyboard from closing
-              ),
+            Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                SizedBox(
+                  height: 50,
+                  child: CupertinoTextField(
+                    controller: _controller,
+                    autofocus: true,
+                    onSubmitted: onSubmit,
+                    textAlign: TextAlign.center,
+                    style: Const.textStyleChatField,
+                    placeholder: "Type here something",
+                    placeholderStyle: Const.textStyleChatField
+                        .copyWith(color: Colors.grey[350]),
+                    keyboardType: TextInputType.url,
+                    onEditingComplete: () {}, // prevent keyboard from closing
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        child: Icon(Icons.file_copy),
+                        onTap: sendFile,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -72,10 +95,6 @@ class _ChatState extends State<Chat> {
     if (text.length != 0) {
       _controller.value = TextEditingValue.empty;
       sendText(text);
-      // setState(() {
-      //   listUrls.insert(0, text);
-      //   listKey.currentState?.insertItem(0);
-      // });
     }
   }
 
@@ -88,25 +107,58 @@ class _ChatState extends State<Chat> {
     }
   }
 
+  Future<void> sendFile() async {
+    final file = await openFile();
+    final data = await file?.readAsBytes();
+    if (file == null || data == null) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Const.colors[4],
+        content: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            "Working with your file",
+            style: Const.textStyleSnackBar,
+          ),
+        ),
+      ),
+    );
+    if (data.length > 1024 * 1024 * 20) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Const.colors[4],
+          content: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              "File size is large than 20MB, we are not working with such yet(",
+              style: Const.textStyleSnackBar,
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+    final uniqueName =
+        DateTime.now().millisecondsSinceEpoch.toString() + "." + file.name;
+    final storage = FirebaseStorage.instance.ref("files").child(uniqueName);
+    try {
+      await storage.putData(data);
+      final fileUrl = await storage.getDownloadURL();
+      sendText(file.name + "|" + fileUrl);
+    } on FirebaseException catch (e) {
+      print("Here " + e.stackTrace.toString());
+    }
+  }
+
   Future<void> connectQR() async {
     try {
       FirebaseDatabase.instance
           .ref("qrs/${widget.code}")
           .update({"connected": true});
-      // var snapshot =
-      //     await FirebaseDatabase.instance.ref("qrs/${widget.code}/links").get();
-      // if (snapshot.exists) {
-      //   setState(() {
-      //     listUrls = (snapshot.value as Map<String, dynamic>)
-      //         .values
-      //         .map((e) => e.toString())
-      //         .toList()
-      //         .reversed
-      //         .toList();
-      //     listUrls.forEach((element) => listKey.currentState?.insertItem(0));
-      //   });
-      // }
-      links = FirebaseDatabase.instance.ref("qrs/${widget.code}/links")
+      links = FirebaseDatabase.instance
+          .ref("qrs/${widget.code}/links")
           .onChildAdded
           .listen((DatabaseEvent event) {
         if (event.snapshot.value is String) {

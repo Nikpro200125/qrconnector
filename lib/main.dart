@@ -1,10 +1,12 @@
 import 'dart:core';
-import 'package:qrconnector/chat.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qrconnector/chat.dart';
+
 import 'MainWindow.dart';
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -27,7 +29,7 @@ void main() async {
             path: "/scan/:sessionId",
             builder: (BuildContext context, GoRouterState state) {
               return Material(
-                child: Chat(code: state.params['sessionId'] ?? "Error Code!"),
+                child: Chat(code: state.params['sessionId']!),
               );
             },
             redirect: (context, state) async {

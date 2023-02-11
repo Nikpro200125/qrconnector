@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'historyList.dart';
+
 import 'QRWidget.dart';
 import 'constants.dart';
+import 'historyList.dart';
 
 class WaitingAndOut extends StatefulWidget {
   WaitingAndOut({super.key, required this.newRef, required this.link});

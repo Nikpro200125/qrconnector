@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Const {
-  static final textStyle = TextStyle(
-    color: Colors.pinkAccent,
-    fontFamily: 'Ahayo',
-    fontSize: 40,
-  );
-
   static final textStyleWaitingHeader = TextStyle(
     color: colors[0],
     fontFamily: 'Ahayo',
