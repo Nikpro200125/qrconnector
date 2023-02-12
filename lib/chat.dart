@@ -42,50 +42,57 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Const.colors[3],
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              child: HistoryList(urls: listUrls, listkey: listKey),
-            ),
-            SizedBox(height: 10),
-            Stack(
-              alignment: Alignment.centerLeft,
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 950,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(
-                  height: 50,
-                  child: CupertinoTextField(
-                    controller: _controller,
-                    autofocus: true,
-                    onSubmitted: onSubmit,
-                    textAlign: TextAlign.center,
-                    style: Const.textStyleChatField,
-                    placeholder: "Type here something",
-                    placeholderStyle: Const.textStyleChatField
-                        .copyWith(color: Colors.grey[350]),
-                    keyboardType: TextInputType.url,
-                    onEditingComplete: () {}, // prevent keyboard from closing
-                  ),
+                Expanded(
+                  child: HistoryList(urls: listUrls, listkey: listKey),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        child: Icon(Icons.file_copy),
-                        onTap: sendFile,
+                SizedBox(height: 10),
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: CupertinoTextField(
+                        controller: _controller,
+                        autofocus: true,
+                        onSubmitted: onSubmit,
+                        textAlign: TextAlign.center,
+                        style: Const.textStyleChatField,
+                        placeholder: "Type here something",
+                        placeholderStyle: Const.textStyleChatField
+                            .copyWith(color: Colors.grey[350]),
+                        keyboardType: TextInputType.url,
+                        onEditingComplete: () {}, // prevent keyboard from closing
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            child: Icon(Icons.file_copy),
+                            onTap: sendFile,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
