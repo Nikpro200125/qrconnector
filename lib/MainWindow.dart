@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:qrconnector/constants.dart';
+import 'package:qrconnector/services.dart';
 
 import 'QRPage.dart';
 import 'Waiting.dart';

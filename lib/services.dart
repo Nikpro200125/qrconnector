@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Const {
   static final textStyleWaitingHeader = TextStyle(
@@ -38,4 +39,25 @@ class Const {
     0xFF3F5560,
     0xFF64957F
   ].map((e) => Color(e)).toList();
+}
+
+void showSnackBar(BuildContext context, String textSnackBar,
+    [Duration? duration]) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Const.colors[4],
+      duration: duration ?? Duration(milliseconds: 1500),
+      content: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          textSnackBar,
+          style: Const.textStyleSnackBar,
+        ),
+      ),
+    ),
+  );
+}
+
+void saveToClipboard(String text) {
+  Clipboard.setData(ClipboardData(text: text));
 }

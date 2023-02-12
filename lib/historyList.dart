@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'constants.dart';
+import 'services.dart';
 
 class HistoryList extends StatelessWidget {
-  HistoryList({required this.urls, this.listkey});
+  HistoryList({required this.urls, this.listKey});
 
   final List<String> urls;
-  final listkey;
+  final listKey;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedList(
-      key: listkey ?? GlobalKey(),
+      key: listKey ?? GlobalKey(),
       reverse: true,
       initialItemCount: urls.length,
       itemBuilder: (context, index, animation) {
@@ -46,8 +45,9 @@ class HistoryListItem extends StatelessWidget {
             fit: FlexFit.tight,
             child: InkWell(
               onTap: () {
-                showSnackBarCopiedToBuffer(context,
-                    'Link to the File "$fileName" has been copied', linkToFile);
+                saveToClipboard(linkToFile);
+                showSnackBar(
+                    context, 'Link to the File "$fileName" has been copied');
               },
               child: Container(
                 constraints: BoxConstraints(
@@ -73,9 +73,7 @@ class HistoryListItem extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: InkWell(
-              onTap: () {
-                openLink(linkToFile);
-              },
+              onTap: () => openLink(context, linkToFile),
               child: Icon(
                 Icons.download_rounded,
                 size: Const.textStyleHistoryList.fontSize! + 20,
@@ -91,10 +89,9 @@ class HistoryListItem extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            showSnackBarCopiedToBuffer(
-                context,
-                '"${item.length > 30 ? item.substring(0, 30) + "..." : item}" has been copied to clipboard',
-                item);
+            saveToClipboard(item);
+            showSnackBar(context,
+                '"${item.length > 30 ? item.substring(0, 30) + "..." : item}" has been copied to clipboard');
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,12 +117,12 @@ class HistoryListItem extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: InkWell(
-                    onTap: () {
-                      openLink(RegExp(r'^[\w.]+\.\w+(?:/[\w&/\-?=%#.]+)?$')
-                              .hasMatch(item)
-                          ? 'http://' + item
-                          : item);
-                    },
+                    onTap: () => openLink(
+                        context,
+                        RegExp(r'^[\w.]+\.\w+(?:/[\w&/\-?=%#.]+)?$')
+                                .hasMatch(item)
+                            ? 'http://' + item
+                            : item),
                     child: Icon(
                       Icons.open_in_new_rounded,
                       color: Const.colors[3],
@@ -166,30 +163,12 @@ class HistoryListItem extends StatelessWidget {
     );
   }
 
-  Future<void> openLink(String link) async {
+  Future<void> openLink(BuildContext context, String link) async {
     if (!await launchUrl(
       Uri.parse(link),
       mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(enableDomStorage: false),
     )) {
-      print('Error launching link');
+      showSnackBar(context, 'Error launching link', Duration(seconds: 5));
     }
-  }
-
-  void showSnackBarCopiedToBuffer(
-      BuildContext context, String textSnackBar, String textToCopy) async {
-    await Clipboard.setData(ClipboardData(text: textToCopy));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Const.colors[4],
-        content: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            textSnackBar,
-            style: Const.textStyleSnackBar,
-          ),
-        ),
-      ),
-    );
   }
 }

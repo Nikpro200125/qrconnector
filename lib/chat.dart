@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qrconnector/historyList.dart';
 
-import 'constants.dart';
+import 'services.dart';
 
 class Chat extends StatefulWidget {
   Chat({required this.code});
@@ -53,7 +53,7 @@ class _ChatState extends State<Chat> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
-                  child: HistoryList(urls: listUrls, listkey: listKey),
+                  child: HistoryList(urls: listUrls, listKey: listKey),
                 ),
                 SizedBox(height: 10),
                 Stack(

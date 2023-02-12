@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'constants.dart';
+import 'services.dart';
 
 class QR extends StatelessWidget {
   QR({required this.link, required this.minSize});

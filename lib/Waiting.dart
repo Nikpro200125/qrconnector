@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'QRWidget.dart';
-import 'constants.dart';
+import 'services.dart';
 import 'historyList.dart';
 
 class WaitingAndOut extends StatefulWidget {
@@ -38,7 +38,7 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: HistoryList(urls: urls, listkey: listKey),
+              child: HistoryList(urls: urls, listKey: listKey),
             ),
             SizedBox(height: 10),
             AnimatedTextKit(

@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qrconnector/chat.dart';
 
 import 'MainWindow.dart';
-import 'constants.dart';
+import 'services.dart';
 import 'firebase_options.dart';
 
 void main() async {
