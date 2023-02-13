@@ -47,7 +47,9 @@ class HistoryListItem extends StatelessWidget {
               onTap: () {
                 saveToClipboard(linkToFile);
                 showSnackBar(
-                    context, 'Link to the File "$fileName" has been copied');
+                    context: context,
+                    textSnackBar:
+                        'Link to the File "$fileName" has been copied');
               },
               child: Container(
                 constraints: BoxConstraints(
@@ -90,8 +92,10 @@ class HistoryListItem extends StatelessWidget {
           behavior: HitTestBehavior.translucent,
           onTap: () {
             saveToClipboard(item);
-            showSnackBar(context,
-                '"${item.length > 30 ? item.substring(0, 30) + "..." : item}" has been copied to clipboard');
+            showSnackBar(
+                context: context,
+                textSnackBar:
+                    '"${item.length > 30 ? item.substring(0, 30) + "..." : item}" has been copied to clipboard');
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -117,12 +121,7 @@ class HistoryListItem extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: InkWell(
-                    onTap: () => openLink(
-                        context,
-                        RegExp(r'^[\w.]+\.\w+(?:/[\w&/\-?=%#.]+)?$')
-                                .hasMatch(item)
-                            ? 'http://' + item
-                            : item),
+                    onTap: () => openLink(context, item),
                     child: Icon(
                       Icons.open_in_new_rounded,
                       color: Const.colors[3],
@@ -164,11 +163,17 @@ class HistoryListItem extends StatelessWidget {
   }
 
   Future<void> openLink(BuildContext context, String link) async {
-    if (!await launchUrl(
-      Uri.parse(link),
-      mode: LaunchMode.inAppWebView,
-    )) {
-      showSnackBar(context, 'Error launching link', Duration(seconds: 5));
+    String finalLink =
+        RegExp(r'^[\w.]+\.\w+(?:/[\w&/\-?=%#.]+)?$').hasMatch(item)
+            ? 'http://' + link
+            : link;
+    bool isLaunched =
+        await launchUrl(Uri.parse(finalLink), mode: LaunchMode.inAppWebView);
+    if (!isLaunched) {
+      showSnackBar(
+          context: context,
+          textSnackBar: 'Error launching link',
+          duration: Duration(seconds: 4));
     }
   }
 }

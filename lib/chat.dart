@@ -71,7 +71,8 @@ class _ChatState extends State<Chat> {
                         placeholderStyle: Const.textStyleChatField
                             .copyWith(color: Colors.grey[350]),
                         keyboardType: TextInputType.url,
-                        onEditingComplete: () {}, // prevent keyboard from closing
+                        onEditingComplete:
+                            () {}, // prevent keyboard from closing
                       ),
                     ),
                     Padding(
@@ -110,6 +111,10 @@ class _ChatState extends State<Chat> {
       var ref = FirebaseDatabase.instance.ref("qrs/${widget.code}/links");
       ref.update({ref.push().key!: text});
     } on FirebaseException catch (e) {
+      showSnackBar(
+          context: context,
+          textSnackBar: "Произошла ошибка",
+          duration: Duration(seconds: 4));
       print(e.stackTrace);
     }
   }
@@ -120,31 +125,13 @@ class _ChatState extends State<Chat> {
     if (file == null || data == null) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Const.colors[4],
-        content: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            "Working with your file",
-            style: Const.textStyleSnackBar,
-          ),
-        ),
-      ),
-    );
-    if (data.length > 1024 * 1024 * 20) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Const.colors[4],
-          content: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              "File size is large than 20MB, we are not working with such yet(",
-              style: Const.textStyleSnackBar,
-            ),
-          ),
-        ),
-      );
+    showSnackBar(context: context, textSnackBar: "Working with your file");
+    int maxSize = 1024 * 1024 * 20; // 20 MB
+    if (data.length > maxSize) {
+      showSnackBar(
+          context: context,
+          textSnackBar:
+              "File size is large than 20MB, we are not working with such yet(");
       return;
     }
     final uniqueName =
@@ -155,7 +142,11 @@ class _ChatState extends State<Chat> {
       final fileUrl = await storage.getDownloadURL();
       sendText(file.name + "|" + fileUrl);
     } on FirebaseException catch (e) {
-      print("Here " + e.stackTrace.toString());
+      showSnackBar(
+          context: context,
+          textSnackBar: "Произошла ошибка",
+          duration: Duration(seconds: 4));
+      print(e.stackTrace);
     }
   }
 
@@ -177,6 +168,10 @@ class _ChatState extends State<Chat> {
         }
       });
     } on FirebaseException catch (e) {
+      showSnackBar(
+          context: context,
+          textSnackBar: "Произошла ошибка",
+          duration: Duration(seconds: 4));
       print(e.stackTrace);
     }
   }

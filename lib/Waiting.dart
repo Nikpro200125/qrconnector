@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'QRWidget.dart';
-import 'services.dart';
 import 'historyList.dart';
+import 'services.dart';
 
 class WaitingAndOut extends StatefulWidget {
   WaitingAndOut({super.key, required this.newRef, required this.link});
@@ -92,6 +92,10 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
         }
       });
     } on FirebaseException catch (e) {
+      showSnackBar(
+          context: context,
+          textSnackBar: "Произошла ошибка",
+          duration: Duration(seconds: 4));
       print(e.stackTrace);
     }
   }
@@ -102,7 +106,10 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
       mode: LaunchMode.inAppWebView,
       webViewConfiguration: const WebViewConfiguration(enableDomStorage: false),
     )) {
-      throw Exception('Could not launch $link');
+      showSnackBar(
+          context: context,
+          textSnackBar: "Не удалось открыть ссылку",
+          duration: Duration(seconds: 4));
     }
   }
 }

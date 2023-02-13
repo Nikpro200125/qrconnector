@@ -23,15 +23,10 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     late Widget widget;
 
-    switch (state) {
-      case AppState.QR:
-        widget = QRPage(link: url);
-        break;
-      case AppState.Waiting:
-        widget = WaitingAndOut(newRef: newRef, link: url);
-        break;
-      default:
-        throw UnimplementedError('State $state is not implemented!');
+    if (state == AppState.QR) {
+      widget = QRPage(link: url);
+    } else {
+      widget = WaitingAndOut(newRef: newRef, link: url);
     }
 
     return widget;
@@ -63,6 +58,10 @@ class _MainScreenState extends State<MainScreen> {
         });
       });
     } on FirebaseException catch (e) {
+      showSnackBar(
+          context: context,
+          textSnackBar: "Произошла ошибка",
+          duration: Duration(seconds: 4));
       print(e.stackTrace);
     }
   }

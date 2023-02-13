@@ -41,8 +41,10 @@ class Const {
   ].map((e) => Color(e)).toList();
 }
 
-void showSnackBar(BuildContext context, String textSnackBar,
-    [Duration? duration]) {
+void showSnackBar(
+    {required BuildContext context,
+    required String textSnackBar,
+    Duration? duration}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor: Const.colors[4],
