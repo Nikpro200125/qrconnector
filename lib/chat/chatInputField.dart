@@ -19,22 +19,44 @@ class _ChatInputFieldState extends State<ChatInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerLeft,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          height: 50,
-          child: CupertinoTextField(
-            controller: _controller,
-            autofocus: true,
-            onSubmitted: onSubmit,
-            textAlign: TextAlign.center,
-            style: Const.textStyleChatField,
-            placeholder: "Type here something",
-            placeholderStyle:
-                Const.textStyleChatField.copyWith(color: Colors.grey[350]),
-            keyboardType: TextInputType.url,
-            onEditingComplete: () {}, // prevent keyboard from closing
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: SizedBox(
+            height: 40,
+            width: 40,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                child: const Icon(
+                  Icons.file_copy,
+                  size: 32,
+                ),
+                onTap: sendFile,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: CupertinoTextField(
+              autocorrect: false,
+              controller: _controller,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              style: Const.textStyleChatField,
+              placeholder: "Type here something",
+              placeholderStyle:
+                  Const.textStyleChatField.copyWith(color: Colors.grey[350]),
+              keyboardType: TextInputType.multiline,
+              minLines: 1,
+              maxLines: 4,
+              onEditingComplete: () {},
+              textInputAction: TextInputAction.newline,
+            ),
           ),
         ),
         Padding(
@@ -45,8 +67,11 @@ class _ChatInputFieldState extends State<ChatInputField> {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                child: const Icon(Icons.file_copy),
-                onTap: sendFile,
+                child: const Icon(
+                  Icons.send_rounded,
+                  size: 32,
+                ),
+                onTap: onSubmit,
               ),
             ),
           ),
@@ -67,10 +92,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
     super.dispose();
   }
 
-  void onSubmit(String text) {
-    if (text.length != 0) {
-      _controller.value = TextEditingValue.empty;
-      sendText(text);
+  void onSubmit() {
+    String text = _controller.text;
+    if (text.trim().length != 0) {
+      sendText(text.trim());
+      setState(() {
+        _controller.value = TextEditingValue.empty;
+      });
     }
   }
 
