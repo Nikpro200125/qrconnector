@@ -21,21 +21,21 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    late Widget widget;
-
-    if (state == AppState.QR) {
-      widget = QRPage(link: url);
-    } else {
-      widget = WaitingAndOut(newRef: newRef, link: url);
-    }
-
-    return widget;
+    return (state == AppState.QR)
+        ? QRPage(link: url)
+        : WaitingAndOut(newRef: newRef, link: url);
   }
 
   @override
   void initState() {
     super.initState();
     connectDB();
+  }
+
+  @override
+  void dispose() {
+    connectionState.cancel();
+    super.dispose();
   }
 
   void connectDB() {
@@ -58,10 +58,7 @@ class _MainScreenState extends State<MainScreen> {
         });
       });
     } on FirebaseException catch (e) {
-      showSnackBar(
-          context: context,
-          textSnackBar: "Произошла ошибка",
-          duration: Duration(seconds: 4));
+      showErrorSnackBar(context: context, errorCode: 701);
       print(e.stackTrace);
     }
   }

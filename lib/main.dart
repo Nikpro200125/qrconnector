@@ -5,11 +5,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qrconnector/chat.dart';
+import 'package:qrconnector/chat/chat.dart';
 
-import 'MainWindow.dart';
-import 'services.dart';
 import 'firebase_options.dart';
+import 'host/hostWindow.dart';
+import 'services.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -49,8 +49,8 @@ void main() async {
                 child: Center(
                   child: Column(
                     children: [
-                      SizedBox(height: 200),
-                      SelectableText(
+                      const SizedBox(height: 200),
+                      const SelectableText(
                         "QR link not valid, please close the page and retry",
                         style: Const.textStyleError,
                       ),
@@ -66,8 +66,8 @@ void main() async {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(height: 200),
-                  SelectableText(
+                  const SizedBox(height: 200),
+                  const SelectableText(
                     "Page not found",
                     style: Const.textStyleError,
                   ),

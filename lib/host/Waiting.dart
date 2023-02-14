@@ -7,9 +7,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../historyList/historyList.dart';
+import '../services.dart';
 import 'QRWidget.dart';
-import 'historyList.dart';
-import 'services.dart';
 
 class WaitingAndOut extends StatefulWidget {
   WaitingAndOut({super.key, required this.newRef, required this.link});
@@ -40,7 +40,7 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
             Expanded(
               child: HistoryList(urls: urls, listKey: listKey),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             AnimatedTextKit(
               animatedTexts: [
                 TypewriterAnimatedText(
@@ -50,15 +50,15 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
               ],
               repeatForever: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 color: Const.colors[0],
               ),
               child: QR(link: widget.link, minSize: minSize * 0.5),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -92,10 +92,7 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
         }
       });
     } on FirebaseException catch (e) {
-      showSnackBar(
-          context: context,
-          textSnackBar: "Произошла ошибка",
-          duration: Duration(seconds: 4));
+      showErrorSnackBar(context: context, errorCode: 702);
       print(e.stackTrace);
     }
   }

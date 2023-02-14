@@ -14,13 +14,13 @@ class Const {
     fontSize: 16,
   );
 
-  static final textStyleChatField = TextStyle(
+  static const textStyleChatField = TextStyle(
     color: Colors.purpleAccent,
     fontFamily: 'Ahayo',
     fontSize: 20,
   );
 
-  static final textStyleError = TextStyle(
+  static const textStyleError = TextStyle(
     color: Colors.red,
     fontSize: 30,
   );
@@ -30,7 +30,7 @@ class Const {
     fontSize: 16,
   );
 
-  static final String pathToSite = "https://qrconnector.web.app";
+  static const String pathToSite = "https://qrconnector.web.app";
 
   static final List<Color> colors = [
     0xFFE9E8EE,
@@ -58,6 +58,17 @@ void showSnackBar(
       ),
     ),
   );
+}
+
+void showErrorSnackBar(
+    {required BuildContext context,
+    required int errorCode,
+    String? errorText}) {
+  showSnackBar(
+      context: context,
+      textSnackBar:
+          "An error has occurred with code $errorCode. " + (errorText ?? ""),
+      duration: Duration(seconds: 4));
 }
 
 void saveToClipboard(String text) {

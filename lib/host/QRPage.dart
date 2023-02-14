@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../services.dart';
 import 'QRWidget.dart';
-import 'services.dart';
 
 class QRPage extends StatelessWidget {
   const QRPage({required this.link});
