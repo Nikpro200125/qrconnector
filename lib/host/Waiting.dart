@@ -37,9 +37,7 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: HistoryList(urls: urls, listKey: listKey),
-            ),
+            HistoryList(urls: urls, listKey: listKey),
             const SizedBox(height: 10),
             AnimatedTextKit(
               animatedTexts: [
@@ -50,15 +48,14 @@ class _WaitingAndOutState extends State<WaitingAndOut> {
               ],
               repeatForever: true,
             ),
-            const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 color: Const.colors[0],
               ),
+              margin: const EdgeInsets.symmetric(vertical: 10),
               child: QR(link: widget.link, minSize: minSize * 0.5),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
