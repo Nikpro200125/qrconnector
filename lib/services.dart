@@ -20,6 +20,18 @@ class Const {
     fontSize: 20,
   );
 
+  static final textStyleChatFieldMobile = TextStyle(
+    color: colors[0],
+    fontFamily: 'Ahayo',
+    fontSize: 20,
+  );
+
+  static final textStyleChatFieldDesktop = TextStyle(
+    color: colors[3],
+    fontFamily: 'Ahayo',
+    fontSize: 20,
+  );
+
   static const textStyleError = TextStyle(
     color: Colors.red,
     fontSize: 30,

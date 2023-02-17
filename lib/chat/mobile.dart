@@ -22,6 +22,7 @@ class _ChatInputFieldMobileState extends State<ChatInputFieldMobile> {
   Widget build(BuildContext context) {
     return Container(
       color: Const.colors[4],
+      margin: const EdgeInsets.only(top: 5),
       child: TextFieldTapRegion(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -35,7 +36,7 @@ class _ChatInputFieldMobileState extends State<ChatInputFieldMobile> {
                   controller: _controller,
                   autofocus: true,
                   textAlign: TextAlign.left,
-                  style: Const.textStyleChatField,
+                  style: Const.textStyleChatFieldMobile,
                   placeholder: "Type here something",
                   placeholderStyle: Const.textStyleChatField
                       .copyWith(color: Colors.grey[350]),

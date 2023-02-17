@@ -48,7 +48,6 @@ class _ChatState extends State<Chat> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               HistoryList(urls: listUrls, listKey: listKey),
-              const SizedBox(height: 10),
               ChatInputField(code: widget.code),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qrconnector/chat/fileButton.dart';
 import 'package:qrconnector/chat/textButton.dart';
 import 'package:qrconnector/services.dart';
@@ -17,6 +18,16 @@ class ChatInputFieldDesktop extends StatefulWidget {
 
 class _ChatInputFieldDesktopState extends State<ChatInputFieldDesktop> {
   late TextEditingController _controller;
+  late FocusNode focusNode = FocusNode(
+    onKey: (node, event) {
+      if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
+          !(event.isShiftPressed || event.isControlPressed)) {
+        onSubmit();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +43,15 @@ class _ChatInputFieldDesktopState extends State<ChatInputFieldDesktop> {
               controller: _controller,
               autofocus: true,
               textAlign: TextAlign.center,
-              style: Const.textStyleChatField,
+              style: Const.textStyleChatFieldDesktop,
               placeholder: "Type here something",
               placeholderStyle:
                   Const.textStyleChatField.copyWith(color: Colors.grey[350]),
               keyboardType: TextInputType.multiline,
               minLines: 1,
               maxLines: 4,
-              onEditingComplete: () {},
-              onSubmitted: (s) {},
               textInputAction: TextInputAction.newline,
+              focusNode: focusNode,
             ),
           ),
         ),
