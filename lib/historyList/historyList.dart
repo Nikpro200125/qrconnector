@@ -11,14 +11,17 @@ class HistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: AnimatedList(
-        key: listKey ?? GlobalKey(),
-        reverse: true,
-        initialItemCount: urls.length,
-        itemBuilder: (context, index, animation) {
-          final item = urls[index];
-          return HistoryListItem(item: item, animation: animation);
-        },
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: AnimatedList(
+          key: listKey ?? GlobalKey(),
+          reverse: true,
+          initialItemCount: urls.length,
+          itemBuilder: (context, index, animation) {
+            final item = urls[index];
+            return HistoryListItem(item: item, animation: animation);
+          },
+        ),
       ),
     );
   }

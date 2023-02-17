@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:file_selector/file_selector.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:qrconnector/chat/inputField.dart';
 
 import '../historyList/historyList.dart';
 import '../services.dart';
-import 'chatInputField.dart';
 
 class Chat extends StatefulWidget {
   Chat({required this.code});
@@ -43,7 +44,6 @@ class _ChatState extends State<Chat> {
           constraints: const BoxConstraints(
             maxWidth: 950,
           ),
-          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -78,5 +78,46 @@ class _ChatState extends State<Chat> {
       showErrorSnackBar(context: context, errorCode: 705);
       print(e.stackTrace);
     }
+  }
+}
+
+Future<void> sendFile(BuildContext context, String code) async {
+  final file = await openFile();
+  final data = await file?.readAsBytes();
+  if (file == null || data == null) {
+    return;
+  }
+  showSnackBar(
+      context: context,
+      textSnackBar: "Working with your file",
+      duration: Duration(seconds: 1));
+  int maxSize = 1024 * 1024 * 20; // 20 MB
+  if (data.length > maxSize) {
+    showSnackBar(
+        context: context,
+        textSnackBar:
+            "File size is large than 20MB, we are not working with such yet(");
+    return;
+  }
+  final timeNow = DateTime.now().millisecondsSinceEpoch.toString();
+  final uniqueName = timeNow + "." + file.name;
+  final storage = FirebaseStorage.instance.ref("files").child(uniqueName);
+  try {
+    await storage.putData(data);
+    final fileUrl = await storage.getDownloadURL();
+    sendText(context, code, file.name + "|" + fileUrl);
+  } on FirebaseException catch (e) {
+    showErrorSnackBar(context: context, errorCode: 704);
+    print(e.stackTrace);
+  }
+}
+
+void sendText(BuildContext context, String code, String text) {
+  try {
+    var ref = FirebaseDatabase.instance.ref("qrs/${code}/links");
+    ref.update({ref.push().key!: text});
+  } on FirebaseException catch (e) {
+    showErrorSnackBar(context: context, errorCode: 703);
+    print(e.stackTrace);
   }
 }

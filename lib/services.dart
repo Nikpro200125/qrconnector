@@ -14,8 +14,8 @@ class Const {
     fontSize: 16,
   );
 
-  static const textStyleChatField = TextStyle(
-    color: Colors.purpleAccent,
+  static final textStyleChatField = TextStyle(
+    color: colors[0],
     fontFamily: 'Ahayo',
     fontSize: 20,
   );
